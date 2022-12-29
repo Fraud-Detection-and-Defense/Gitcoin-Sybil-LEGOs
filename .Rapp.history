@@ -1,0 +1,1848 @@
+dim(legodata_ranks)
+class(legodata_ranks)
+legodata_ranks[1:10]
+range(legodata_ranks)
+range(scale(legodata_ranks))
+get_rank <- function(x,type="lb")#
+{#
+	if(type=="lb") return(rank(x))#
+	if(type=="lg") return(rank(-1*x))#
+}#
+range01 <- function(x){(x-min(x))/(max(x)-min(x))}#
+legodata_spl <- as.list(legodata)[2:11]#
+legodata_ranks <- range01(apply(mapply(get_rank,legodata_spl,type=c("lb","lg","lb","lb","lb","lg","lb","lg","lg","lg")),1,sum))
+range(legodata_ranks)
+hist(legodata_ranks)
+library(readr)#
+#
+## Read in Handles#
+legodata <- data.frame(Handle=read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_handles.csv")[,1,drop=TRUE])#
+#
+## Lev Data#
+lev_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Levenshtein_scores.csv")#
+legodata$LevDistance <- lev_df$Distance_Min[match(legodata$Handle,lev_df$Handle)]#
+legodata$LevMatchCount <- lev_df$Distance_Min_is1_Count[match(legodata$Handle,lev_df$Handle)]#
+#
+## Intersectionality#
+inter_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Intersectionality.csv")#
+legodata$IntersectionalityScore <- inter_df$Score[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPActive <- inter_df$poap[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPCount <- inter_df$poap_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensActive <- inter_df$lens[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowers <- inter_df$lens_followers[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowing <- inter_df$lens_following[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOHActive <- inter_df$poh[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTActive <- inter_df$nft[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTCount <- inter_df$nft_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotActive <- inter_df$snapshot[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotVotes <- inter_df$snapshot_votes[match(legodata$Handle,inter_df$Handle)]#
+#
+## DDNA#
+ddna_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_handles_scores.csv")#
+legodata$DDNADistance <- round(ddna_df$Distance_Min[match(legodata$Handle,ddna_df$Handle)],2)#
+#
+## APU#
+apu_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/APU.csv")#
+legodata$APUScore <- round(apu_df$Score[match(legodata$Handle,apu_df$Handle)],2)#
+#
+## SAD#
+sad_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/SAD.csv")#
+legodata$SADScore <- round(sad_df$Score[match(legodata$Handle,sad_df$Handle)],2)#
+#
+## GrantOwner#
+owner_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/grants_owners.csv")#
+legodata$GrantOwner <- ifelse(legodata$Handle %in% owner_df$handle,1,0)#
+#
+## IPs Shared#
+ip_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/IPShared_scores.csv")#
+ip_df$Score <- ip_df$IPCount_ProfShared_gt1/ip_df$IPCount#
+legodata$IPsSharedRatio <- round(ip_df$Score[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsUsedCount <- round(ip_df$IPCount[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsSharedCount <- ip_df$IPCount_ProfShared_gt1[match(legodata$Handle,ip_df$Handle)]#
+#
+## Meta Rank#
+get_rank <- function(x,type="lb")#
+{#
+	if(type=="lb") return(rank(x))#
+	if(type=="lg") return(rank(-1*x))#
+}#
+range01 <- function(x){(x-min(x))/(max(x)-min(x))}#
+legodata_spl <- as.list(legodata)[2:11]#
+legodata$MetaRank <- range01(apply(mapply(get_rank,legodata_spl,type=c("lb","lg","lb","lb","lb","lg","lb","lg","lg","lg")),1,sum))#
+#
+## Write Out Data#
+write_csv(legodata,"~/Desktop/Gitcoin Sybil LEGOs/data_app/LegoDataFull.csv")
+x <- 1:10
+ranl(x)
+rank(x)
+rank(-x)
+library(readr)#
+#
+## Read in Handles#
+legodata <- data.frame(Handle=read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_handles.csv")[,1,drop=TRUE])#
+#
+## Lev Data#
+lev_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Levenshtein_scores.csv")#
+legodata$LevDistance <- lev_df$Distance_Min[match(legodata$Handle,lev_df$Handle)]#
+legodata$LevMatchCount <- lev_df$Distance_Min_is1_Count[match(legodata$Handle,lev_df$Handle)]#
+#
+## Intersectionality#
+inter_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Intersectionality.csv")#
+legodata$IntersectionalityScore <- inter_df$Score[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPActive <- inter_df$poap[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPCount <- inter_df$poap_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensActive <- inter_df$lens[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowers <- inter_df$lens_followers[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowing <- inter_df$lens_following[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOHActive <- inter_df$poh[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTActive <- inter_df$nft[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTCount <- inter_df$nft_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotActive <- inter_df$snapshot[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotVotes <- inter_df$snapshot_votes[match(legodata$Handle,inter_df$Handle)]#
+#
+## DDNA#
+ddna_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_handles_scores.csv")#
+legodata$DDNADistance <- round(ddna_df$Distance_Min[match(legodata$Handle,ddna_df$Handle)],2)#
+#
+## APU#
+apu_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/APU.csv")#
+legodata$APUScore <- round(apu_df$Score[match(legodata$Handle,apu_df$Handle)],2)#
+#
+## SAD#
+sad_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/SAD.csv")#
+legodata$SADScore <- round(sad_df$Score[match(legodata$Handle,sad_df$Handle)],2)#
+#
+## GrantOwner#
+owner_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/grants_owners.csv")#
+legodata$GrantOwner <- ifelse(legodata$Handle %in% owner_df$handle,1,0)#
+#
+## IPs Shared#
+ip_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/IPShared_scores.csv")#
+ip_df$Score <- ip_df$IPCount_ProfShared_gt1/ip_df$IPCount#
+legodata$IPsSharedRatio <- round(ip_df$Score[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsUsedCount <- round(ip_df$IPCount[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsSharedCount <- ip_df$IPCount_ProfShared_gt1[match(legodata$Handle,ip_df$Handle)]#
+#
+## Meta Rank#
+get_rank <- function(x,type="lb",wt=1)#
+{#
+	if(type=="lb") return(wt*rank(x,na.last=TRUE))#
+	if(type=="lg") return(wt*rank(-1*x,na.last=TRUE))#
+}#
+get_rank_NAsWorst <- function(x,type="lb",wt=1)#
+{#
+	if(type=="lb") return(wt*rank(x,na.last=FALSE))#
+	if(type=="lg") return(wt*rank(-1*x,na.last=FALSE))#
+}#
+range01 <- function(x){(x-min(x))/(max(x)-min(x))}#
+legodata_spl <- as.list(legodata)[2:11]#
+legodata$MetaRank <- range01(apply(mapply(get_rank,legodata_spl,type=c("lb","lg","lb","lb","lb","lg","lb","lg","lg","lg"),wt=rep(1,10)),1,sum))#
+legodata$MetaRank_NAsWorst <- range01(apply(mapply(get_rank_NAsWorst,legodata_spl,type=c("lb","lg","lb","lb","lb","lg","lb","lg","lg","lg"),wt=rep(1,10)),1,sum))#
+#
+# data.frame(Var=names(legodata_spl),RankType=c("lb","lg","lb","lb","lb","lg","lb","lg","lg","lg"))#
+#
+## Write Out Data#
+write_csv(legodata,"~/Desktop/Gitcoin Sybil LEGOs/data_app/LegoDataFull.csv")
+library(readr)#
+#
+## Read in Handles#
+legodata <- data.frame(Handle=read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_handles.csv")[,1,drop=TRUE])#
+#
+## Lev Data#
+lev_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Levenshtein_scores.csv")#
+legodata$LevDistance <- lev_df$Distance_Min[match(legodata$Handle,lev_df$Handle)]#
+legodata$LevMatchCount <- lev_df$Distance_Min_is1_Count[match(legodata$Handle,lev_df$Handle)]#
+#
+## Intersectionality#
+inter_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Intersectionality.csv")#
+legodata$IntersectionalityScore <- inter_df$Score[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPActive <- inter_df$poap[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPCount <- inter_df$poap_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensActive <- inter_df$lens[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowers <- inter_df$lens_followers[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowing <- inter_df$lens_following[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOHActive <- inter_df$poh[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTActive <- inter_df$nft[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTCount <- inter_df$nft_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotActive <- inter_df$snapshot[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotVotes <- inter_df$snapshot_votes[match(legodata$Handle,inter_df$Handle)]#
+#
+## DDNA#
+ddna_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_handles_scores.csv")#
+legodata$DDNADistance <- round(ddna_df$Distance_Min[match(legodata$Handle,ddna_df$Handle)],2)#
+#
+## APU#
+apu_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/APU.csv")#
+legodata$APUScore <- round(apu_df$Score[match(legodata$Handle,apu_df$Handle)],2)#
+#
+## SAD#
+sad_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/SAD.csv")#
+legodata$SADScore <- round(sad_df$Score[match(legodata$Handle,sad_df$Handle)],2)#
+#
+## GrantOwner#
+owner_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/grants_owners.csv")#
+legodata$GrantOwner <- ifelse(legodata$Handle %in% owner_df$handle,1,0)#
+#
+## IPs Shared#
+ip_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/IPShared_scores.csv")#
+ip_df$Score <- ip_df$IPCount_ProfShared_gt1/ip_df$IPCount#
+legodata$IPsSharedRatio <- round(ip_df$Score[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsUsedCount <- round(ip_df$IPCount[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsSharedCount <- ip_df$IPCount_ProfShared_gt1[match(legodata$Handle,ip_df$Handle)]#
+#
+## Meta Rank#
+get_rank_Loki <- function(x,type="lb",wt=1)#
+{#
+	if(type=="lb") return(wt*rank(x,na.last=TRUE))#
+	if(type=="lg") return(wt*rank(-1*x,na.last=TRUE))#
+}#
+get_rank_Thor <- function(x,type="lb",wt=1)#
+{#
+	if(type=="lb") return(wt*rank(x,na.last=FALSE))#
+	if(type=="lg") return(wt*rank(-1*x,na.last=FALSE))#
+}#
+range01 <- function(x){(x-min(x))/(max(x)-min(x))}#
+legodata_spl <- as.list(legodata)[2:11]#
+legodata$MetaRank_Loki <- range01(apply(mapply(get_rank_Loki,legodata_spl,type=c("lb","lg","lb","lb","lb","lg","lb","lg","lg","lg"),wt=rep(1,10)),1,sum))#
+legodata$MetaRank_Thor <- range01(apply(mapply(get_rank_Thor,legodata_spl,type=c("lb","lg","lb","lb","lb","lg","lb","lg","lg","lg"),wt=rep(1,10)),1,sum))#
+#
+# data.frame(Var=names(legodata_spl),RankType=c("lb","lg","lb","lb","lb","lg","lb","lg","lg","lg"))#
+#
+## Write Out Data#
+write_csv(legodata,"~/Desktop/Gitcoin Sybil LEGOs/data_app/LegoDataFull.csv")
+library(RSelenium)#
+library(stringr)#
+#
+## Start Server#
+rD <- rsDriver(browser = "chrome",chromever="105.0.5195.52")#
+remDr <- rD[["client"]]#
+remDr$getStatus()#
+#
+#############################################################
+## Login#
+#############################################################
+## Go to feast login#
+remDr$navigate("https://feast.punjab.gov.in/login.aspx")#
+Sys.sleep(5)#
+#
+## Select Login type#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddllogintype"]/option[3]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlRegion"]/option[2]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlDist"]/option[21]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlDepot"]/option[111]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+#
+## Fill Password#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_Password"]')#
+webElem$clickElement()#
+webElem$sendKeysToElement(list("depot@123"))#
+Sys.sleep(2)#
+## Solve capthca#
+# webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_CaptchaImage1"]')#
+# webElem$getElementAttribute("src")#
+# chars <- tesseract(options = list(tessedit_char_whitelist = toupper(letters)))#
+# ocr_data(aa, engine = chars)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_txtcaptcha"]')#
+webElem$clickElement()
+library(ggplot2)
+update.packages()
+library(readr)#
+#
+## Read in Handles#
+legodata <- data.frame(Handle=read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_handles.csv")[,1,drop=TRUE])#
+#
+## Lev Data#
+lev_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Levenshtein_scores.csv")#
+legodata$LevDistance <- lev_df$Distance_Min[match(legodata$Handle,lev_df$Handle)]#
+legodata$LevMatchCount <- lev_df$Distance_Min_is1_Count[match(legodata$Handle,lev_df$Handle)]#
+#
+## Intersectionality#
+inter_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Intersectionality.csv")#
+legodata$IntersectionalityScore <- inter_df$Score[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPActive <- inter_df$poap[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPCount <- inter_df$poap_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensActive <- inter_df$lens[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowers <- inter_df$lens_followers[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowing <- inter_df$lens_following[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOHActive <- inter_df$poh[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTActive <- inter_df$nft[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTCount <- inter_df$nft_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotActive <- inter_df$snapshot[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotVotes <- inter_df$snapshot_votes[match(legodata$Handle,inter_df$Handle)]#
+#
+## DDNA#
+ddna_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_handles_scores.csv")#
+data_mat_amt <- readRDS("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_binmat_handles.RDS")
+dim(data_mat_amt)
+names(data_mat_amt)
+class(data_mat_amt)
+colnames(data_mat_amt)
+data_mat_handles <- data_mat_amt[,!grepl("Amt",colnames(data_mat_amt))]
+dim(data_mat_handles)
+dim(data_mat_amt)
+library(Rfast)
+aa <- rowsums(data_mat_handles)
+rownames(data_mat_handles)[1:1-]
+rownames(data_mat_handles)[1:10]
+which(rownames(data_mat_handles)=="yogesh-bansal")
+aa[38657]
+library(readr)#
+library(Rfast)#
+#
+## Read in Handles#
+legodata <- data.frame(Handle=read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_handles.csv")[,1,drop=TRUE])#
+#
+## Lev Data#
+lev_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Levenshtein_scores.csv")#
+legodata$LevDistance <- lev_df$Distance_Min[match(legodata$Handle,lev_df$Handle)]#
+legodata$LevMatchCount <- lev_df$Distance_Min_is1_Count[match(legodata$Handle,lev_df$Handle)]#
+#
+## Intersectionality#
+inter_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Intersectionality.csv")#
+legodata$IntersectionalityScore <- inter_df$Score[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPActive <- inter_df$poap[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPCount <- inter_df$poap_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensActive <- inter_df$lens[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowers <- inter_df$lens_followers[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowing <- inter_df$lens_following[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOHActive <- inter_df$poh[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTActive <- inter_df$nft[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTCount <- inter_df$nft_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotActive <- inter_df$snapshot[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotVotes <- inter_df$snapshot_votes[match(legodata$Handle,inter_df$Handle)]#
+#
+## DDNA#
+ddna_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_handles_scores.csv")#
+data_mat_amt <- readRDS("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_binmat_handles.RDS")#
+data_mat_handles <- data_mat_amt[,!grepl("Amt",colnames(data_mat_amt))]#
+legodata$DDNADistance <- round(ddna_df$Distance_Min[match(legodata$Handle,ddna_df$Handle)],2)#
+legodata$DDNAGrantsDonated <- rowsums(data_mat_handles)#
+#
+## APU#
+apu_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/APU.csv")#
+legodata$APUScore <- round(apu_df$Score[match(legodata$Handle,apu_df$Handle)],2)#
+#
+## SAD#
+sad_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/SAD.csv")#
+legodata$SADScore <- round(sad_df$Score[match(legodata$Handle,sad_df$Handle)],2)#
+#
+## GrantOwner#
+owner_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/grants_owners.csv")#
+legodata$GrantOwner <- ifelse(legodata$Handle %in% owner_df$handle,1,0)#
+#
+## IPs Shared#
+ip_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/IPShared_scores.csv")#
+ip_df$Score <- ip_df$IPCount_ProfShared_gt1/ip_df$IPCount#
+legodata$IPsSharedRatio <- round(ip_df$Score[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsUsedCount <- round(ip_df$IPCount[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsSharedCount <- ip_df$IPCount_ProfShared_gt1[match(legodata$Handle,ip_df$Handle)]
+head(legodata)
+dim(data_mat_handles)
+aa[1:10]
+names(aa)
+library(readr)#
+library(Rfast)#
+#
+## Read in Handles#
+legodata <- data.frame(Handle=read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_handles.csv")[,1,drop=TRUE])#
+#
+## Lev Data#
+lev_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Levenshtein_scores.csv")#
+legodata$LevDistance <- lev_df$Distance_Min[match(legodata$Handle,lev_df$Handle)]#
+legodata$LevMatchCount <- lev_df$Distance_Min_is1_Count[match(legodata$Handle,lev_df$Handle)]#
+#
+## Intersectionality#
+inter_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Intersectionality.csv")#
+legodata$IntersectionalityScore <- inter_df$Score[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPActive <- inter_df$poap[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPCount <- inter_df$poap_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensActive <- inter_df$lens[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowers <- inter_df$lens_followers[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowing <- inter_df$lens_following[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOHActive <- inter_df$poh[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTActive <- inter_df$nft[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTCount <- inter_df$nft_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotActive <- inter_df$snapshot[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotVotes <- inter_df$snapshot_votes[match(legodata$Handle,inter_df$Handle)]#
+#
+## DDNA#
+ddna_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_handles_scores.csv")#
+data_mat_handles <- readRDS("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_binmat_handles.RDS")#
+data_mat_handles <- data_mat_handles[,!grepl("Amt",colnames(data_mat_handles))]#
+data_sum_handles <- data.frame(Handle = rownames(data_mat_handles),DDNAGrantsDonated=rowsums(data_mat_handles))
+head(data_sum_handles)
+library(readr)#
+library(Rfast)#
+#
+## Read in Handles#
+legodata <- data.frame(Handle=read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_handles.csv")[,1,drop=TRUE])#
+#
+## Lev Data#
+lev_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Levenshtein_scores.csv")#
+legodata$LevDistance <- lev_df$Distance_Min[match(legodata$Handle,lev_df$Handle)]#
+legodata$LevMatchCount <- lev_df$Distance_Min_is1_Count[match(legodata$Handle,lev_df$Handle)]#
+#
+## Intersectionality#
+inter_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Intersectionality.csv")#
+legodata$IntersectionalityScore <- inter_df$Score[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPActive <- inter_df$poap[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPCount <- inter_df$poap_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensActive <- inter_df$lens[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowers <- inter_df$lens_followers[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowing <- inter_df$lens_following[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOHActive <- inter_df$poh[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTActive <- inter_df$nft[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTCount <- inter_df$nft_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotActive <- inter_df$snapshot[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotVotes <- inter_df$snapshot_votes[match(legodata$Handle,inter_df$Handle)]#
+#
+## DDNA#
+ddna_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_handles_scores.csv")#
+data_mat_handles <- readRDS("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_binmat_handles.RDS")#
+data_mat_handles <- data_mat_handles[,!grepl("Amt",colnames(data_mat_handles))]#
+data_sum_handles <- data.frame(Handle = rownames(data_mat_handles),DDNAGrantsDonated=rowsums(data_mat_handles))#
+legodata$DDNADistance <- round(ddna_df$Distance_Min[match(legodata$Handle,ddna_df$Handle)],2)#
+legodata$DDNAGrantsDonated <- data_sum_handles$DDNAGrantsDonated[match(legodata$Handle,data_sum_handles$Handle)]#
+#
+## APU#
+apu_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/APU.csv")#
+legodata$APUScore <- round(apu_df$Score[match(legodata$Handle,apu_df$Handle)],2)#
+#
+## SAD#
+sad_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/SAD.csv")#
+legodata$SADScore <- round(sad_df$Score[match(legodata$Handle,sad_df$Handle)],2)#
+#
+## GrantOwner#
+owner_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/grants_owners.csv")#
+legodata$GrantOwner <- ifelse(legodata$Handle %in% owner_df$handle,1,0)#
+#
+## IPs Shared#
+ip_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/IPShared_scores.csv")#
+ip_df$Score <- ip_df$IPCount_ProfShared_gt1/ip_df$IPCount#
+legodata$IPsSharedRatio <- round(ip_df$Score[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsUsedCount <- round(ip_df$IPCount[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsSharedCount <- ip_df$IPCount_ProfShared_gt1[match(legodata$Handle,ip_df$Handle)]
+head(legodata)
+library(readr)#
+library(Rfast)#
+#
+## Read in Handles#
+legodata <- data.frame(Handle=read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_handles.csv")[,1,drop=TRUE])#
+#
+## Lev Data#
+lev_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Levenshtein_scores.csv")#
+legodata$LevDistance <- lev_df$Distance_Min[match(legodata$Handle,lev_df$Handle)]#
+legodata$LevMatchCount <- lev_df$Distance_Min_is1_Count[match(legodata$Handle,lev_df$Handle)]#
+#
+## Intersectionality#
+inter_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Intersectionality.csv")#
+legodata$IntersectionalityScore <- inter_df$Score[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPActive <- inter_df$poap[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPCount <- inter_df$poap_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensActive <- inter_df$lens[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowers <- inter_df$lens_followers[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowing <- inter_df$lens_following[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOHActive <- inter_df$poh[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTActive <- inter_df$nft[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTCount <- inter_df$nft_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotActive <- inter_df$snapshot[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotVotes <- inter_df$snapshot_votes[match(legodata$Handle,inter_df$Handle)]#
+#
+## DDNA#
+ddna_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_handles_scores.csv")#
+data_mat_handles <- readRDS("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_binmat_handles.RDS")#
+data_mat_handles <- data_mat_handles[,!grepl("Amt",colnames(data_mat_handles))]#
+data_sum_handles <- data.frame(Handle = rownames(data_mat_handles),DDNAGrantsDonated=rowsums(data_mat_handles))#
+legodata$DDNADistance <- round(ddna_df$Distance_Min[match(legodata$Handle,ddna_df$Handle)],2)#
+legodata$DDNAGrantsDonated <- data_sum_handles$DDNAGrantsDonated[match(legodata$Handle,data_sum_handles$Handle)]#
+#
+## APU#
+apu_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/APU.csv")#
+legodata$APUScore <- round(apu_df$Score[match(legodata$Handle,apu_df$Handle)],2)#
+#
+## SAD#
+sad_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/SAD.csv")#
+legodata$SADScore <- round(sad_df$Score[match(legodata$Handle,sad_df$Handle)],2)#
+#
+## GrantOwner#
+owner_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/grants_owners.csv")#
+legodata$GrantOwner <- ifelse(legodata$Handle %in% owner_df$handle,1,0)#
+#
+## IPs Shared#
+ip_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/IPShared_scores.csv")#
+ip_df$Score <- ip_df$IPCount_ProfShared_gt1/ip_df$IPCount#
+legodata$IPsSharedRatio <- round(ip_df$Score[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsUsedCount <- round(ip_df$IPCount[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsSharedCount <- ip_df$IPCount_ProfShared_gt1[match(legodata$Handle,ip_df$Handle)]#
+#
+## Meta Rank#
+get_rank_Loki <- function(x,type="lb",wt=1)#
+{#
+	if(type=="lb") return(wt*rank(x,na.last=TRUE))#
+	if(type=="lg") return(wt*rank(-1*x,na.last=TRUE))#
+}#
+get_rank_Thor <- function(x,type="lb",wt=1)#
+{#
+	if(type=="lb") return(wt*rank(x,na.last=FALSE))#
+	if(type=="lg") return(wt*rank(-1*x,na.last=FALSE))#
+}#
+range01 <- function(x){(x-min(x))/(max(x)-min(x))}#
+legodata_spl <- as.list(legodata)[2:12]#
+legodata$MetaRank_Loki <- range01(apply(mapply(get_rank_Loki,legodata_spl,type=c("lb","lg","lb","lb","lb","lb","lg","lb","lg","lg","lg"),wt=rep(1,11)),1,sum))#
+legodata$MetaRank_Thor <- range01(apply(mapply(get_rank_Thor,legodata_spl,type=c("lb","lg","lb","lb","lb","lb","lg","lb","lg","lg","lg"),wt=rep(1,11)),1,sum))#
+#
+# data.frame(Var=names(legodata_spl),RankType=c("lb","lg","lb","lb","lb","lg","lb","lg","lg","lg"))#
+#
+## Write Out Data#
+write_csv(legodata,"~/Desktop/Gitcoin Sybil LEGOs/data_app/LegoDataFull.csv")
+as.dist(matrix(rep(0,100),10,10))
+as.dist(matrix(rep(0,100),10,10))+as.dist(matrix(rep(0,100),10,10))
+as.dist(matrix(sample(0:1,100,replace=TRUE),10,10))+as.dist(matrix(sample(0:1,100,replace=TRUE),10,10))
+as.dist(matrix(sample(0:1,100,replace=TRUE),10,10))->aa
+aa
+aa<=0
+aa>=0
+aa==1
+as.dist(aa==1)
+library(RSelenium)#
+library(stringr)#
+#
+## Start Server#
+rD <- rsDriver(browser = "chrome",chromever="105.0.5195.52")#
+remDr <- rD[["client"]]#
+remDr$getStatus()#
+#
+#############################################################
+## Login#
+#############################################################
+## Go to feast login#
+remDr$navigate("https://feast.punjab.gov.in/login.aspx")#
+Sys.sleep(5)#
+#
+## Select Login type#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddllogintype"]/option[3]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlRegion"]/option[2]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlDist"]/option[21]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlDepot"]/option[111]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+#
+## Fill Password#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_Password"]')#
+webElem$clickElement()#
+webElem$sendKeysToElement(list("depot@123"))#
+Sys.sleep(2)#
+## Solve capthca#
+# webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_CaptchaImage1"]')#
+# webElem$getElementAttribute("src")#
+# chars <- tesseract(options = list(tessedit_char_whitelist = toupper(letters)))#
+# ocr_data(aa, engine = chars)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_txtcaptcha"]')#
+webElem$clickElement()
+remDr$navigate("https://feast.punjab.gov.in/login.aspx")#
+Sys.sleep(5)#
+#
+## Select Login type#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddllogintype"]/option[3]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlRegion"]/option[2]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlDist"]/option[21]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlDepot"]/option[111]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+#
+## Fill Password#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_Password"]')#
+webElem$clickElement()#
+webElem$sendKeysToElement(list("depot@123"))#
+Sys.sleep(2)#
+## Solve capthca#
+# webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_CaptchaImage1"]')#
+# webElem$getElementAttribute("src")#
+# chars <- tesseract(options = list(tessedit_char_whitelist = toupper(letters)))#
+# ocr_data(aa, engine = chars)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_txtcaptcha"]')#
+webElem$clickElement()
+remDr$navigate("https://feast.punjab.gov.in/login.aspx")#
+Sys.sleep(5)#
+#
+## Select Login type#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddllogintype"]/option[3]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlRegion"]/option[2]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlDist"]/option[21]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlDepot"]/option[110]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+#
+## Fill Password#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_Password"]')#
+webElem$clickElement()#
+webElem$sendKeysToElement(list("depot@123"))#
+Sys.sleep(2)#
+## Solve capthca#
+# webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_CaptchaImage1"]')#
+# webElem$getElementAttribute("src")#
+# chars <- tesseract(options = list(tessedit_char_whitelist = toupper(letters)))#
+# ocr_data(aa, engine = chars)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_txtcaptcha"]')#
+webElem$clickElement()
+#############################################################
+## Issue Parameters#
+#############################################################
+## Issue Parameters#
+issued <- data.frame()#
+trucks <- c("pb13f7185","pcis9482","pb13ab1643","pb08g8617","pb550761","pb13y2294","pb138683","pb04g8188","pas 4005","pb07al5025","pb13a6028","pb139030","pb131401","pb13a1649","pb248816","pb135827","pb635009","pb13s3484")#
+wcmnum <- 155#
+depot_code <- 0#
+max_bags <- 30000#
+idx=0#
+## Weight Code#
+options(digits=8)#
+cbp50 <- function(weight)#
+{#
+	n_bags <- round(weight/.5)#
+	return(list(Bags=n_bags,Weight = (weight+n_bags*.00135)))#
+}#
+cbj50 <- function(weight)#
+{#
+	n_bags <- round(weight/.5)#
+	return(list(Bags=n_bags,Weight = (weight+n_bags*.00580)))#
+}#
+cbp30 <- function(weight)#
+{#
+	n_bags <- round(weight/.3)#
+	return(list(Bags=n_bags,Weight = (weight+n_bags*.00088)))#
+}#
+#############################################################
+#############################################################
+#############################################################
+## Loop Challan Issue#
+#############################################################
+while(TRUE)#
+{#
+	start_time <- Sys.time()#
+	## Go to truck challan page#
+	webElem <- remDr$findElement(using = "xpath", value = '//*[@id="tvHierarchyViewt3"]')#
+	webElem$clickElement()#
+	Sys.sleep(5)#
+#
+	## Select Allocation#
+	webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtAllocationOrder"]')#
+	webElem$clickElement()#
+	Sys.sleep(3)#
+	webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlAllocationOrder_3"]')#
+	webElem$clickElement()#
+	Sys.sleep(12)#
+	webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_deliverytr"]/td[1]')#
+	webElem$clickElement()#
+	Sys.sleep(12)#
+	## Select Depot#
+	while(TRUE)#
+	{#
+		## Select Depot#
+		depot_idx <- paste0("//*[@id='ContentPlaceHolder1_lstDeliveryOrder_",idx,"']")#
+		webElem <- remDr$findElement(using = "xpath", value = depot_idx)#
+		webElem$clickElement()#
+		Sys.sleep(15)#
+		depot_idx <- paste0("//*[@id='ContentPlaceHolder1_lstDeliveryOrder']/tbody/tr[",idx+1,"]/td/label")#
+		webElem <- remDr$findElement(using = "xpath", value = depot_idx)#
+		depot_code <- as.numeric(gsub("105300500","",str_extract(webElem$getElementText()[[1]], "(?<=\\().+?(?=\\))")[[1]]))#
+		## Submit and get allocation#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_btnsubmittdetails"]')#
+		webElem$clickElement()#
+		Sys.sleep(8)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_Grdcomqtytotal_lblgrdissueqty_0"]')#
+		wheat_issue <- as.numeric(webElem$getElementText()[[1]])#
+		if(wheat_issue < 2)#
+		{#
+			depot_idx <- paste0("//*[@id='ContentPlaceHolder1_lstDeliveryOrder_",idx,"']")#
+			webElem <- remDr$findElement(using = "xpath", value = depot_idx)#
+			webElem$clickElement()#
+			Sys.sleep(10)#
+			idx <- idx+1#
+			next()#
+		}#
+#
+		## Fill Book Number#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtWCMBookNo"]')#
+		webElem$clickElement()#
+		webElem$sendKeysToElement(list("1"))#
+		Sys.sleep(2)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtWCMSerialNo"]')#
+		webElem$clickElement()#
+		webElem$sendKeysToElement(list(as.character(wcmnum)))#
+#
+		## Fill gatepass Details#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlcommodity"]/option[2]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlWeighmentType"]/option[2]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		## Bag Weight#
+		bag_issue <- cbp30(wheat_issue)#
+		message(paste0("Bags ",(sum(issued$Bags)+bag_issue[[1]])))#
+		if((sum(issued$Bags)+bag_issue[[1]])>max_bags) stop("Max Bag Limit Reached")#
+		# webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlBagType"]/option[6]') # Jute50 580#
+		# webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlBagType"]/option[4]') # PP50 135#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlBagType"]/option[7]') # PP30 88#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtNoOfBag"]')#
+		webElem$clickElement()#
+		webElem$sendKeysToElement(list(selKeys$right_arrow))#
+		webElem$sendKeysToElement(list(selKeys$backspace))#
+		webElem$sendKeysToElement(list(as.character(bag_issue[[1]])))#
+		Sys.sleep(3)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_deliverytr"]/td[1]')#
+		webElem$clickElement()#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtGrossQty"]')#
+		webElem$clickElement()#
+		Sys.sleep(3)#
+		webElem$sendKeysToElement(list(as.character(bag_issue[[2]])))#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_deliverytr"]/td[1]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_btnAddBagDetails"]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+#
+		## Transport#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddltransportername"]/option[689]')#
+		webElem$clickElement()#
+		Sys.sleep(3)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txttruckno"]')#
+		webElem$clickElement()#
+		Sys.sleep(3)#
+		webElem$sendKeysToElement(list(trucks[ifelse(wcmnum%%length(trucks)==0,length(trucks),wcmnum%%length(trucks))]))#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_deliverytr"]/td[1]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtDriverMobileNo"]')#
+		webElem$clickElement()#
+		Sys.sleep(3)#
+		webElem$sendKeysToElement(list("9999988888"))#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_deliverytr"]/td[1]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_btngentruckchallan"]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem$acceptAlert()#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_btnPrint"]')#
+		webElem$clickElement()#
+		Sys.sleep(8)#
+#
+		## On success#
+		issued <- rbind(issued,data.frame(#
+											Date = as.Date(Sys.time()),#
+											GPNum = wcmnum,#
+											Depot = depot_code,#
+											Bags = bag_issue[[1]],#
+											Weight = bag_issue[[2]]#
+				))#
+		wcmnum <- wcmnum+1#
+		break()#
+	}#
+	end_time <- Sys.time()#
+	message(paste0("Took ",round(as.numeric(difftime(end_time,start_time,units="mins")),2)," Minutes."))#
+}
+## Go to feast login#
+remDr$navigate("https://feast.punjab.gov.in/login.aspx")#
+Sys.sleep(5)#
+#
+## Select Login type#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddllogintype"]/option[3]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlRegion"]/option[2]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlDist"]/option[21]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_ddlDepot"]/option[111]')#
+webElem$clickElement()#
+Sys.sleep(5)#
+#
+## Fill Password#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_Password"]')#
+webElem$clickElement()#
+webElem$sendKeysToElement(list("depot@123"))#
+Sys.sleep(2)#
+## Solve capthca#
+# webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_CaptchaImage1"]')#
+# webElem$getElementAttribute("src")#
+# chars <- tesseract(options = list(tessedit_char_whitelist = toupper(letters)))#
+# ocr_data(aa, engine = chars)#
+webElem <- remDr$findElement(using = "xpath", value = '//*[@id="UXLogin_txtcaptcha"]')#
+webElem$clickElement()
+## Issue Parameters#
+issued <- data.frame()#
+trucks <- c("pb13f7185","pcis9482","pb13ab1643","pb08g8617","pb550761","pb13y2294","pb138683","pb04g8188","pas 4005","pb07al5025","pb13a6028","pb139030","pb131401","pb13a1649","pb248816","pb135827","pb635009","pb13s3484")#
+wcmnum <- 156#
+depot_code <- 0#
+max_bags <- 30000#
+idx=0#
+## Weight Code#
+options(digits=8)#
+cbp50 <- function(weight)#
+{#
+	n_bags <- round(weight/.5)#
+	return(list(Bags=n_bags,Weight = (weight+n_bags*.00135)))#
+}#
+cbj50 <- function(weight)#
+{#
+	n_bags <- round(weight/.5)#
+	return(list(Bags=n_bags,Weight = (weight+n_bags*.00580)))#
+}#
+cbp30 <- function(weight)#
+{#
+	n_bags <- round(weight/.3)#
+	return(list(Bags=n_bags,Weight = (weight+n_bags*.00088)))#
+}#
+#############################################################
+#############################################################
+#############################################################
+## Loop Challan Issue#
+#############################################################
+while(TRUE)#
+{#
+	start_time <- Sys.time()#
+	## Go to truck challan page#
+	webElem <- remDr$findElement(using = "xpath", value = '//*[@id="tvHierarchyViewt3"]')#
+	webElem$clickElement()#
+	Sys.sleep(5)#
+#
+	## Select Allocation#
+	webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtAllocationOrder"]')#
+	webElem$clickElement()#
+	Sys.sleep(3)#
+	webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlAllocationOrder_3"]')#
+	webElem$clickElement()#
+	Sys.sleep(12)#
+	webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_deliverytr"]/td[1]')#
+	webElem$clickElement()#
+	Sys.sleep(12)#
+	## Select Depot#
+	while(TRUE)#
+	{#
+		## Select Depot#
+		depot_idx <- paste0("//*[@id='ContentPlaceHolder1_lstDeliveryOrder_",idx,"']")#
+		webElem <- remDr$findElement(using = "xpath", value = depot_idx)#
+		webElem$clickElement()#
+		Sys.sleep(15)#
+		depot_idx <- paste0("//*[@id='ContentPlaceHolder1_lstDeliveryOrder']/tbody/tr[",idx+1,"]/td/label")#
+		webElem <- remDr$findElement(using = "xpath", value = depot_idx)#
+		depot_code <- as.numeric(gsub("105300500","",str_extract(webElem$getElementText()[[1]], "(?<=\\().+?(?=\\))")[[1]]))#
+		## Submit and get allocation#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_btnsubmittdetails"]')#
+		webElem$clickElement()#
+		Sys.sleep(8)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_Grdcomqtytotal_lblgrdissueqty_0"]')#
+		wheat_issue <- as.numeric(webElem$getElementText()[[1]])#
+		if(wheat_issue < 2)#
+		{#
+			depot_idx <- paste0("//*[@id='ContentPlaceHolder1_lstDeliveryOrder_",idx,"']")#
+			webElem <- remDr$findElement(using = "xpath", value = depot_idx)#
+			webElem$clickElement()#
+			Sys.sleep(10)#
+			idx <- idx+1#
+			next()#
+		}#
+#
+		## Fill Book Number#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtWCMBookNo"]')#
+		webElem$clickElement()#
+		webElem$sendKeysToElement(list("1"))#
+		Sys.sleep(2)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtWCMSerialNo"]')#
+		webElem$clickElement()#
+		webElem$sendKeysToElement(list(as.character(wcmnum)))#
+#
+		## Fill gatepass Details#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlcommodity"]/option[2]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlWeighmentType"]/option[2]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		## Bag Weight#
+		bag_issue <- cbp30(wheat_issue)#
+		message(paste0("Bags ",(sum(issued$Bags)+bag_issue[[1]])))#
+		if((sum(issued$Bags)+bag_issue[[1]])>max_bags) stop("Max Bag Limit Reached")#
+		# webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlBagType"]/option[6]') # Jute50 580#
+		# webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlBagType"]/option[4]') # PP50 135#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddlBagType"]/option[7]') # PP30 88#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtNoOfBag"]')#
+		webElem$clickElement()#
+		webElem$sendKeysToElement(list(selKeys$right_arrow))#
+		webElem$sendKeysToElement(list(selKeys$backspace))#
+		webElem$sendKeysToElement(list(as.character(bag_issue[[1]])))#
+		Sys.sleep(3)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_deliverytr"]/td[1]')#
+		webElem$clickElement()#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtGrossQty"]')#
+		webElem$clickElement()#
+		Sys.sleep(3)#
+		webElem$sendKeysToElement(list(as.character(bag_issue[[2]])))#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_deliverytr"]/td[1]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_btnAddBagDetails"]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+#
+		## Transport#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_ddltransportername"]/option[689]')#
+		webElem$clickElement()#
+		Sys.sleep(3)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txttruckno"]')#
+		webElem$clickElement()#
+		Sys.sleep(3)#
+		webElem$sendKeysToElement(list(trucks[ifelse(wcmnum%%length(trucks)==0,length(trucks),wcmnum%%length(trucks))]))#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_deliverytr"]/td[1]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_txtDriverMobileNo"]')#
+		webElem$clickElement()#
+		Sys.sleep(3)#
+		webElem$sendKeysToElement(list("9999988888"))#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_deliverytr"]/td[1]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_btngentruckchallan"]')#
+		webElem$clickElement()#
+		Sys.sleep(5)#
+		webElem$acceptAlert()#
+		webElem <- remDr$findElement(using = "xpath", value = '//*[@id="ContentPlaceHolder1_btnPrint"]')#
+		webElem$clickElement()#
+		Sys.sleep(8)#
+#
+		## On success#
+		issued <- rbind(issued,data.frame(#
+											Date = as.Date(Sys.time()),#
+											GPNum = wcmnum,#
+											Depot = depot_code,#
+											Bags = bag_issue[[1]],#
+											Weight = bag_issue[[2]]#
+				))#
+		wcmnum <- wcmnum+1#
+		break()#
+	}#
+	end_time <- Sys.time()#
+	message(paste0("Took ",round(as.numeric(difftime(end_time,start_time,units="mins")),2)," Minutes."))#
+}
+issued
+readr::write_csv(issued,"~/Downloads/Issued.csv")
+## Read in file#
+library(readxl)#
+#
+## List all sheets#
+sheets <- excel_sheets("~/Downloads/GR15 Squelch Prep.xlsx")#
+all_handles <- list()#
+#
+## Sybil Scoring Legos#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Scoring Legos")
+head(data)
+sheets
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Donation")
+head(data)
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Donation",skip=1)
+head(data)
+## Read in file#
+library(readxl)#
+#
+## List all sheets#
+sheets <- excel_sheets("~/Downloads/GR15 Squelch Prep.xlsx")#
+all_handles <- list()#
+#
+## Sybil Scoring Legos#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Scoring Legos")#
+all_handles <- c(all_handles,"Sybil Scoring Legos" = list(data$Handle))#
+#
+## Sybil Donation#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Donation",skip=1)#
+all_handles <- c(all_handles,"Sybil Donation" = list(data$handle))
+all_handles[[2]]
+## Read in file#
+library(readxl)#
+#
+## List all sheets#
+sheets <- excel_sheets("~/Downloads/GR15 Squelch Prep.xlsx")#
+all_handles <- list()#
+#
+## Sybil Scoring Legos#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Scoring Legos")#
+all_handles <- c(all_handles,"Sybil Scoring Legos" = unique(list(data$Handle)))#
+#
+## Sybil Donation#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Donation",skip=1)#
+all_handles <- c(all_handles,"Sybil Donation" = unique(list(data$handle)))
+sheets
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="NaiveFlagging",skip=0)
+head(daya)
+head(data)
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="NaiveFlagging",skip=0)#
+all_handles <- c(all_handles,"NaiveFlagging" = unique(list(data$handle)))
+all_handles[[3]]
+sheets
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Burners",skip=0)
+head(data)
+dim(data)
+table(data$Flag)
+all_handles <- c(all_handles,"Burners" = unique(list(data$handle[data$Flag])))
+all_handles[[4]]
+sheets
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="SyncSwapVoters",skip=0)
+head(data)
+dim(data)
+unique(list(data$handle[data$Review]))
+data$handle[data$Review?]
+data$handle[data$`Review?`]
+apudf <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/stamps_and_scores.csv")
+library(jsonlite)#
+library(readr)#
+#
+## Read in APU data#
+apudf <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/stamps_and_scores.csv")
+head(apudf)
+min(apudf$last_apu_score)
+which(apudf$last_apu_score==0)
+apudf [7,]
+which(apudf$handle=="omnianalytics")
+head(apudf)
+apudf$stamps[1]
+lapply(apudf$stamps,fromJSON)[[1]]
+apudfs <- lapply(apudf$stamps,fromJSON)
+all_stamps <- unique(unlist(apudfs))
+all_stamps
+apudfs <- lapply(apudf$stamps,fromJSON)#
+all_stamps <- unique(unlist(apudfs))#
+lapply(apudfs,function(x,all_stamps) all_stamps %in% x)[[1]]
+lapply(apudfs,function(x,all_stamps) all_stamps %in% x,all_stamps=all_stamps)[[1]]
+head(apudf)
+stamps_wide <- cbind(Handle = apudf$handle, do.call(rbind,lapply(apudfs,function(x,all_stamps) all_stamps %in% x,all_stamps=all_stamps))
+stamps_wide <- cbind(Handle = apudf$handle, do.call(rbind,lapply(apudfs,function(x,all_stamps) all_stamps %in% x,all_stamps=all_stamps)))
+head(stamps_wide)
+stamps_wide <- cbind(Handle = apudf$handle, as.data.frame(do.call(rbind,lapply(apudfs,function(x,all_stamps) all_stamps %in% x,all_stamps=all_stamps))))
+head(stamps_wide)
+names(stamps_wide)[-1] <- all_stamps
+head(stamps_wide)
+write_csv(stamps_wide,"~/Downloads/stamps_wide.csv")
+sapply(apudfs,length)
+hist(sapply(apudfs,length))
+quantile(sapply(apudfs,length))
+quantile(sapply(apudfs,length),1:100/100)
+mean(sapply(apudfs,length))
+aa <- unlist(apudfs)
+table(aa)
+barplot(table(aa))
+sort(table(aa))
+sort(table(aa),decreasing=TRUE)
+hist(sapply(apudfs,length))
+hist(sapply(apudfs,length),20)
+hist(sapply(apudfs,length),100)
+hist(sapply(apudfs,length),50)
+## Read in file#
+library(readxl)#
+#
+## List all sheets#
+sheets <- excel_sheets("~/Downloads/GR15 Squelch Prep.xlsx")#
+all_handles <- list()#
+#
+## Sybil Scoring Legos#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Scoring Legos")#
+all_handles <- c(all_handles,"Sybil Scoring Legos" = unique(list(data$Handle)))#
+#
+## Sybil Donation#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Donation",skip=1)#
+all_handles <- c(all_handles,"Sybil Donation" = unique(list(data$handle)))#
+#
+## NaiveFlagging#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="NaiveFlagging",skip=0)#
+all_handles <- c(all_handles,"NaiveFlagging" = unique(list(data$handle)))#
+#
+## Burners#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Burners",skip=0)#
+all_handles <- c(all_handles,"Burners" = unique(list(data$handle[data$Flag])))
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="SyncSwapVoters",skip=0)
+unique(list(data$handle[data$Review?]))
+unique(list(data$handle[data$`Review?`]))
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="SyncSwapVoters",skip=0)#
+all_handles <- c(all_handles,"Burners" = unique(list(data$handle[data$Review?])))
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="SyncSwapVoters",skip=0)#
+all_handles <- c(all_handles,"Burners" = unique(list(data$handle[data$`Review?`])))
+sheets
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="LOKI set",skip=0)
+head(data)
+dim(data)
+unique(list(data$handle))
+## Read in file#
+library(readxl)#
+#
+## List all sheets#
+sheets <- excel_sheets("~/Downloads/GR15 Squelch Prep.xlsx")#
+all_handles <- list()#
+#
+## Sybil Scoring Legos#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Scoring Legos")#
+all_handles <- c(all_handles,"Sybil Scoring Legos" = unique(list(data$Handle)))#
+#
+## Sybil Donation#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Donation",skip=1)#
+all_handles <- c(all_handles,"Sybil Donation" = unique(list(data$handle)))#
+#
+## NaiveFlagging#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="NaiveFlagging",skip=0)#
+all_handles <- c(all_handles,"NaiveFlagging" = unique(list(data$handle)))#
+#
+## Burners#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Burners",skip=0)#
+all_handles <- c(all_handles,"Burners" = unique(list(data$handle[data$Flag])))#
+#
+## SyncSwapVoters#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="SyncSwapVoters",skip=0)#
+all_handles <- c(all_handles,"SyncSwapVoters" = unique(list(data$handle[data$`Review?`])))#
+#
+## LOKI set#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="LOKI set",skip=0)#
+all_handles <- c(all_handles,"LOKI set" = unique(list(data$handle)))
+sheets
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Jigger GR14",skip=0)
+head(data)
+dim(data)
+wall_handles <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_wallets.csv")
+library(readr)
+wall_handles <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_wallets.csv")
+head(wall_handles)
+table(data$address %in% wall_handles$address)
+length(data$address[data$burner])
+table(data$address[data$burner] %in% wall_handles$address)
+## Read in file#
+library(readxl)#
+library(readr)#
+#
+## List all sheets#
+sheets <- excel_sheets("~/Downloads/GR15 Squelch Prep.xlsx")#
+all_handles <- list()#
+#
+## Sybil Scoring Legos#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Scoring Legos")#
+all_handles <- c(all_handles,"Sybil Scoring Legos" = unique(list(data$Handle)))#
+#
+## Sybil Donation#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Donation",skip=1)#
+all_handles <- c(all_handles,"Sybil Donation" = unique(list(data$handle)))#
+#
+## NaiveFlagging#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="NaiveFlagging",skip=0)#
+all_handles <- c(all_handles,"NaiveFlagging" = unique(list(data$handle)))#
+#
+## Burners#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Burners",skip=0)#
+all_handles <- c(all_handles,"Burners" = unique(list(data$handle[data$Flag])))#
+#
+## SyncSwapVoters#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="SyncSwapVoters",skip=0)#
+all_handles <- c(all_handles,"SyncSwapVoters" = unique(list(data$handle[data$`Review?`])))#
+#
+## LOKI set#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="LOKI set",skip=0)#
+all_handles <- c(all_handles,"LOKI set" = unique(list(data$handle)))
+all_handles_u <- unique(unlist(all_handles))
+length(all_handles_u)
+SybilBinary <- lapply(all_handles,function(x,all_handles_u) all_handles_u %in% x)
+SybilBinary <- lapply(all_handles,function(x,all_handles_u) all_handles_u %in% x,all_handles_u=all_handles_u)
+SybilBinary[[1]]
+head(do.call(cbind,lapply(all_handles,function(x,all_handles_u) as.numeric(all_handles_u %in% x,all_handles_u=all_handles_u))))
+all_handles_u <- unique(unlist(all_handles))
+SybilBinary <- do.call(cbind,lapply(all_handles,function(x,all_handles_u) as.numeric(all_handles_u %in% x,all_handles_u=all_handles_u)))
+SybilBinary <- do.call(cbind,lapply(all_handles,function(x,all_handles_u) as.numeric(all_handles_u %in% x),all_handles_u=all_handles_u))
+head(SybilBinary)
+SybilBinary <- cbind(Handle=all_handles_u,as.data.frame(do.call(cbind,lapply(all_handles,function(x,all_handles_u) as.numeric(all_handles_u %in% x),all_handles_u=all_handles_u))))
+head(SybilBinary)
+apply(SybilBinary,1,sum)
+apply(SybilBinary[,-1],1,sum)
+order(apply(SybilBinary[,-1],1,sum),decreasing=TRUE)
+head(SybilBinary[order(apply(SybilBinary[,-1],1,sum),decreasing=TRUE),])
+## Read in file#
+library(readxl)#
+library(readr)#
+#
+## List all sheets#
+sheets <- excel_sheets("~/Downloads/GR15 Squelch Prep.xlsx")#
+all_handles <- list()#
+#
+## Sybil Scoring Legos#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Scoring Legos")#
+all_handles <- c(all_handles,"Sybil Scoring Legos" = unique(list(data$Handle)))#
+#
+## Sybil Donation#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Donation",skip=1)#
+all_handles <- c(all_handles,"Sybil Donation" = unique(list(data$handle)))#
+#
+## NaiveFlagging#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="NaiveFlagging",skip=0)#
+all_handles <- c(all_handles,"NaiveFlagging" = unique(list(data$handle)))#
+#
+## Burners#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Burners",skip=0)#
+all_handles <- c(all_handles,"Burners" = unique(list(data$handle[data$Flag])))#
+#
+## SyncSwapVoters#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="SyncSwapVoters",skip=0)#
+all_handles <- c(all_handles,"SyncSwapVoters" = unique(list(data$handle[data$`Review?`])))#
+#
+## LOKI set#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="LOKI set",skip=0)#
+all_handles <- c(all_handles,"LOKI set" = unique(list(data$handle)))#
+#
+## Jigger GR14#
+# data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Jigger GR14",skip=0)#
+# wall_handles <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_wallets.csv")#
+#
+## Make Binary Matrix#
+all_handles_u <- unique(unlist(all_handles))#
+SybilBinary <- cbind(Handle=all_handles_u,as.data.frame(do.call(cbind,lapply(all_handles,function(x,all_handles_u) as.numeric(all_handles_u %in% x),all_handles_u=all_handles_u))))#
+SybilBinary <- SybilBinary[order(apply(SybilBinary[,-1],1,sum),decreasing=TRUE),]#
+write_csv(SybilBinary,"~/Downloads/SybilBinary.csv")
+head(SybilBinary,20)
+rle(SybilBinary$Sybil Scoring Lego)
+rle(SybilBinary$`Sybil Scoring Lego`)
+legodata <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_app/LegoData.csv")
+table(SybilBinary$Handle %in% legodata$Handle)
+451*30
+library(readr)#
+#
+## Read in Handles#
+legodata <- data.frame(Handle=read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_handles.csv")[,1,drop=TRUE])#
+#
+## Lev Data#
+lev_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Levenshtein_scores.csv")#
+legodata$LevDistance <- lev_df$Distance_Min[match(legodata$Handle,lev_df$Handle)]#
+#
+## Intersectionality#
+inter_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Intersectionality.csv")#
+legodata$IntersectionalityScore <- inter_df$Score[match(legodata$Handle,inter_df$Handle)]#
+#
+## DDNA#
+ddna_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_handles_scores.csv")#
+legodata$DDNADistance <- round(ddna_df$Distance_Min[match(legodata$Handle,ddna_df$Handle)],2)#
+#
+## APU#
+apu_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/APU.csv")
+sum(is.na(match(legodata$Handle,apu_df$Handle)))
+legodata$APUScore <- round(apu_df$Score[match(legodata$Handle,apu_df$Handle)],2)
+legodata$APUScore <- ifelse(is.na(legodata$APUScore),0,legodata$APUScore)
+sum(is.na())
+sum(is.na(legodata$APUScore))
+library(readr)#
+#
+## Read in Handles#
+legodata <- data.frame(Handle=read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_handles.csv")[,1,drop=TRUE])#
+#
+## Lev Data#
+lev_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Levenshtein_scores.csv")#
+legodata$LevDistance <- lev_df$Distance_Min[match(legodata$Handle,lev_df$Handle)]#
+#
+## Intersectionality#
+inter_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Intersectionality.csv")#
+legodata$IntersectionalityScore <- inter_df$Score[match(legodata$Handle,inter_df$Handle)]#
+#
+## DDNA#
+ddna_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_handles_scores.csv")#
+legodata$DDNADistance <- round(ddna_df$Distance_Min[match(legodata$Handle,ddna_df$Handle)],2)#
+#
+## APU#
+apu_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/APU.csv")#
+legodata$APUScore <- round(apu_df$Score[match(legodata$Handle,apu_df$Handle)],2)#
+legodata$APUScore <- ifelse(is.na(legodata$APUScore),0,legodata$APUScore)#
+#
+## SAD#
+sad_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/SAD.csv")#
+legodata$SADScore <- round(sad_df$Score[match(legodata$Handle,sad_df$Handle)],2)#
+#
+## GrantOwner#
+owner_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/grants_owners.csv")#
+legodata$GrantOwner <- ifelse(legodata$Handle %in% owner_df$handle,1,0)#
+#
+## IPs Shared#
+ip_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/IPShared_scores.csv")#
+ip_df$Score <- ip_df$IPCount_ProfShared_gt1/ip_df$IPCount#
+legodata$IPsShared <- round(ip_df$Score[match(legodata$Handle,ip_df$Handle)],2)#
+#
+## Write Out Data#
+write_csv(legodata,"~/Desktop/Gitcoin Sybil LEGOs/data_app/LegoData.csv")
+library(readr)#
+library(Rfast)#
+#
+## Read in Handles#
+legodata <- data.frame(Handle=read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_handles.csv")[,1,drop=TRUE])#
+#
+## Lev Data#
+lev_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Levenshtein_scores.csv")#
+legodata$LevDistance <- lev_df$Distance_Min[match(legodata$Handle,lev_df$Handle)]#
+legodata$LevMatchCount <- lev_df$Distance_Min_is1_Count[match(legodata$Handle,lev_df$Handle)]#
+#
+## Intersectionality#
+inter_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Intersectionality.csv")#
+legodata$IntersectionalityScore <- inter_df$Score[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPActive <- inter_df$poap[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOAPCount <- inter_df$poap_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensActive <- inter_df$lens[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowers <- inter_df$lens_followers[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityLensFollowing <- inter_df$lens_following[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityPOHActive <- inter_df$poh[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTActive <- inter_df$nft[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalityNFTCount <- inter_df$nft_count[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotActive <- inter_df$snapshot[match(legodata$Handle,inter_df$Handle)]#
+# legodata$IntersectionalitySnapshotVotes <- inter_df$snapshot_votes[match(legodata$Handle,inter_df$Handle)]#
+#
+## DDNA#
+ddna_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_handles_scores.csv")#
+data_mat_handles <- readRDS("~/Desktop/Gitcoin Sybil LEGOs/data_processed/Jaccard_binmat_handles.RDS")#
+data_mat_handles <- data_mat_handles[,!grepl("Amt",colnames(data_mat_handles))]#
+data_sum_handles <- data.frame(Handle = rownames(data_mat_handles),DDNAGrantsDonated=rowsums(data_mat_handles))#
+legodata$DDNADistance <- round(ddna_df$Distance_Min[match(legodata$Handle,ddna_df$Handle)],2)#
+legodata$DDNAGrantsDonated <- data_sum_handles$DDNAGrantsDonated[match(legodata$Handle,data_sum_handles$Handle)]#
+#
+## APU#
+apu_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/APU.csv")#
+legodata$APUScore <- round(apu_df$Score[match(legodata$Handle,apu_df$Handle)],2)#
+legodata$APUScore <- ifelse(is.na(legodata$APUScore),0,legodata$APUScore)#
+#
+## SAD#
+sad_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/SAD.csv")#
+legodata$SADScore <- round(sad_df$Score[match(legodata$Handle,sad_df$Handle)],2)#
+#
+## GrantOwner#
+owner_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/grants_owners.csv")#
+legodata$GrantOwner <- ifelse(legodata$Handle %in% owner_df$handle,1,0)#
+#
+## IPs Shared#
+ip_df <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_processed/IPShared_scores.csv")#
+ip_df$Score <- ip_df$IPCount_ProfShared_gt1/ip_df$IPCount#
+legodata$IPsSharedRatio <- round(ip_df$Score[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsUsedCount <- round(ip_df$IPCount[match(legodata$Handle,ip_df$Handle)],2)#
+legodata$IPsSharedCount <- ip_df$IPCount_ProfShared_gt1[match(legodata$Handle,ip_df$Handle)]#
+#
+## Meta Rank#
+get_rank_Loki <- function(x,type="lb",wt=1)#
+{#
+	if(type=="lb") return(wt*rank(x,na.last=TRUE))#
+	if(type=="lg") return(wt*rank(-1*x,na.last=TRUE))#
+}#
+get_rank_Thor <- function(x,type="lb",wt=1)#
+{#
+	if(type=="lb") return(wt*rank(x,na.last=FALSE))#
+	if(type=="lg") return(wt*rank(-1*x,na.last=FALSE))#
+}#
+range01 <- function(x){(x-min(x))/(max(x)-min(x))}#
+legodata_spl <- as.list(legodata)[2:12]#
+legodata$MetaRank_Loki <- range01(apply(mapply(get_rank_Loki,legodata_spl,type=c("lb","lg","lb","lb","lb","lb","lg","lb","lg","lg","lg"),wt=rep(1,11)),1,sum))#
+legodata$MetaRank_Thor <- range01(apply(mapply(get_rank_Thor,legodata_spl,type=c("lb","lg","lb","lb","lb","lb","lg","lb","lg","lg","lg"),wt=rep(1,11)),1,sum))#
+#
+# data.frame(Var=names(legodata_spl),RankType=c("lb","lg","lb","lb","lb","lg","lb","lg","lg","lg"))#
+#
+## Write Out Data#
+write_csv(legodata,"~/Desktop/Gitcoin Sybil LEGOs/data_app/LegoDataFull.csv")
+## Loading Libraries#
+library(readr)#
+library(dplyr)#
+library(ggplot2)#
+library(ggthemes)#
+library(omnitheme)#
+options(scipen=999)#
+#
+## Load whole data#
+legodata <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_app/LegoData.csv")#
+#
+## Lev Plot#
+y_lim1 <- c(0,15000)#
+p1 <-   legodata %>%#
+		group_by(LevDistance) %>%#
+		summarise(count = n()) %>%#
+		ggplot(aes(x = LevDistance, y = count)) +#
+		annotate("rect", xmin = -Inf, xmax = 1.5, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "red") +#
+		annotate("rect", xmin = 1.5, xmax = Inf, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "green") +#
+		geom_bar(stat = "identity", fill = "#6F3FF5", width=.35) +#
+		scale_y_continuous(breaks = scales::pretty_breaks(n = 10),limits=y_lim1) + #
+		scale_x_continuous(breaks = (1:5),limits=c(0,6)) + #
+		theme_fivethirtyeight() +#
+		theme(#
+				axis.title = element_text(),#
+				rect=element_blank(),#
+				panel.grid = element_blank(),#
+				panel.background= element_blank(),#
+				plot.background = element_blank()#
+		) +#
+		watermark_img(filename = "~/Desktop/Gitcoin Sybil LEGOs/www/gc.png", location = "tr", width = 40, alpha = 0.5) +#
+		labs(#
+				# title = "Distribution of the Minimum Levenshtein Distances across Gitcoin Account Names.",#
+				x = "Minimum Levenshtein Distance",#
+				y = "Number of Accounts"#
+		)#
+saveRDS(p1,"~/Desktop/Gitcoin Sybil LEGOs/data_app/Plot_Lev.RDS")#
+# ggsave("~/Plot_Lev.jpg",plot=p1,width = 12,height=6)#
+#
+## Intersectionality#
+y_lim2 <- c(0,12000)#
+p2 <-   legodata %>%#
+		group_by(IntersectionalityScore) %>%#
+		summarise(count = n()) %>%#
+		ggplot(aes(x = IntersectionalityScore, y = count)) +#
+		annotate("rect", xmin = -Inf, xmax = .5, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "red") +#
+		annotate("rect", xmin = .5, xmax = Inf, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "green") +#
+		geom_bar(stat = "identity", fill = "#6F3FF5",width=.5) +#
+		scale_y_continuous(breaks = scales::pretty_breaks(n = 10),limits=y_lim2) + #
+		scale_x_continuous(breaks = scales::pretty_breaks(n = 5)) + #
+		theme_fivethirtyeight() +#
+		theme(#
+				axis.title = element_text(),#
+				rect=element_blank(),#
+				panel.grid = element_blank(),#
+				panel.background= element_blank(),#
+				plot.background = element_blank()#
+		) +#
+		watermark_img(filename = "~/Desktop/Gitcoin Sybil LEGOs/www/gc.png", location = "tr", width = 40, alpha = 0.5) +#
+		labs(#
+				# title = "Distribution of the On-Chain Intersectionality Scores",#
+				x = "On-chain Intersectionality Score",#
+				y = "Number of Accounts"#
+		)#
+saveRDS(p2,"~/Desktop/Gitcoin Sybil LEGOs/data_app/Plot_Intersectionality.RDS")#
+# ggsave("~/Plot_Intersectionality.jpg",plot=p2,width = 12,height=6)#
+#
+## DDNA#
+y_lim3 <- c(0,22000)#
+p3 <-   legodata %>%#
+		group_by(DDNADistance) %>%#
+		summarise(count = n()) %>%#
+		ggplot(aes(x = DDNADistance, y = count)) +#
+		annotate("rect", xmin = -Inf, xmax = .1, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "red") +#
+		annotate("rect", xmin = .5, xmax = Inf, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "green") +#
+		geom_bar(stat = "identity", fill = "#6F3FF5") +#
+		scale_y_continuous(breaks = scales::pretty_breaks(n = 10),limits=y_lim3) + #
+		scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) + #
+		theme_fivethirtyeight() +#
+		theme(#
+				axis.title = element_text(),#
+				rect=element_blank(),#
+				panel.grid = element_blank(),#
+				panel.background= element_blank(),#
+				plot.background = element_blank()#
+		) +#
+		watermark_img(filename = "~/Desktop/Gitcoin Sybil LEGOs/www/gc.png", location = "tr", width = 40, alpha = 0.5) +#
+		labs(#
+				# title = "Distribution of the Minimum Jaccard Distances across Gitcoin Donor DNA Profiles.",#
+				# subtitle = "DonorDNA profiles have been derived from both the collection of sets and the total amount donated per user.",#
+				x = "Jaccard Minumum Distance between Donors",#
+				y = "Number of Accounts"#
+		)#
+saveRDS(p3,"~/Desktop/Gitcoin Sybil LEGOs/data_app/Plot_DDNA.RDS")#
+# ggsave("~/Plot_DDNA.jpg",plot=p3,width = 12,height=6)#
+#
+## APU#
+y_lim4 <- c(0,4000)#
+p4 <-   legodata %>%#
+		group_by(APUScore) %>%#
+		summarise(count = n()) %>%#
+		ggplot(aes(x = APUScore, y = count)) +#
+		annotate("rect", xmin = -Inf, xmax = .1, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "red") +#
+		annotate("rect", xmin = .2, xmax = Inf, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "green") +#
+		geom_bar(stat = "identity", fill = "#6F3FF5") +#
+		scale_y_continuous(breaks = scales::pretty_breaks(n = 10),limits=y_lim4) + #
+		scale_x_continuous(breaks = (1:10)/10,limits=c(0,1)) +#
+		theme_fivethirtyeight() +#
+		theme(#
+				axis.title = element_text(),#
+				rect=element_blank(),#
+				panel.grid = element_blank(),#
+				panel.background= element_blank(),#
+				plot.background = element_blank()#
+		) +#
+		watermark_img(filename = "~/Desktop/Gitcoin Sybil LEGOs/www/gc.png", location = "tr", width = 40, alpha = 0.5) +#
+		labs(#
+				# title = "Distribution of APU Scores for Passport Users.",#
+				x = "APU Score",#
+				y = "Number of Accounts"#
+		)#
+saveRDS(p4,"~/Desktop/Gitcoin Sybil LEGOs/data_app/Plot_APU.RDS")#
+# ggsave("~/Plot_APU.jpg",plot=p4,width = 12,height=6)#
+#
+## SAD#
+y_lim5 <- c(0,30000)#
+p5 <-   legodata %>%#
+		group_by(SADScore) %>%#
+		summarise(count = n()) %>%#
+		ggplot(aes(x = SADScore, y = count)) +#
+		annotate("rect", xmin = -Inf, xmax = .4, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "green") +#
+		annotate("rect", xmin = .7, xmax = Inf, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "red") +#
+		geom_bar(stat = "identity", fill = "#6F3FF5") +#
+		scale_y_continuous(breaks = scales::pretty_breaks(n = 10),limits=y_lim5) + #
+		scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) + #
+		theme_fivethirtyeight() +#
+		theme(#
+				axis.title = element_text(),#
+				rect=element_blank(),#
+				panel.grid = element_blank(),#
+				panel.background= element_blank(),#
+				plot.background = element_blank()#
+		) +#
+		watermark_img(filename = "~/Desktop/Gitcoin Sybil LEGOs/www/gc.png", location = "tr", width = 40, alpha = 0.5) +#
+		labs(#
+				# title = "Distribution of SAD Prediction Scores for Gitcoin Accounts.",#
+				x = "SAD Prediction Score",#
+				y = "Number of Accounts"#
+		)#
+saveRDS(p5,"~/Desktop/Gitcoin Sybil LEGOs/data_app/Plot_SAD.RDS")#
+# ggsave("~/Plot_SAD.jpg",plot=p5,width = 12,height=6)#
+#
+## IPs#
+y_lim6 <- c(0,18000)#
+p6 <-   legodata %>%#
+		group_by(IPsShared) %>%#
+		summarise(count = n()) %>%#
+		ggplot(aes(x = IPsShared, y = count)) +#
+		annotate("rect", xmin = -Inf, xmax = .4, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "green") +#
+		annotate("rect", xmin = .7, xmax = Inf, ymin = -Inf, ymax = Inf, alpha = 0.25, fill = "red") +#
+		geom_bar(stat = "identity", fill = "#6F3FF5") +#
+		scale_y_continuous(breaks = scales::pretty_breaks(n = 10),limits=y_lim6) + #
+		scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) + #
+		theme_fivethirtyeight() +#
+		theme(#
+				axis.title = element_text(),#
+				rect=element_blank(),#
+				panel.grid = element_blank(),#
+				panel.background= element_blank(),#
+				plot.background = element_blank()#
+		) +#
+		watermark_img(filename = "~/Desktop/Gitcoin Sybil LEGOs/www/gc.png", location = "tr", width = 40, alpha = 0.5) +#
+		labs(#
+				# title = "Distribution of ip_ratio_gt5 for Gitcoin Accounts.",#
+				x = "Ratio Shared IPs",#
+				y = "Number of Accounts"#
+		)#
+saveRDS(p6,"~/Desktop/Gitcoin Sybil LEGOs/data_app/Plot_IPs.RDS")#
+# ggsave("~/Plot_IPs.jpg",plot=p6,width = 12,height=6)
+## Read in file#
+library(readxl)#
+library(readr)#
+#
+## List all sheets#
+sheets <- excel_sheets("~/Downloads/GR15 Squelch Prep.xlsx")#
+all_handles <- list()#
+#
+## Sybil Scoring Legos#
+# data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Scoring Legos")#
+# all_handles <- c(all_handles,"Sybil Scoring Legos" = unique(list(data$Handle)))#
+data <- read_csv("~/Downloads/FilterHandles_1664365741.csv")#
+all_handles <- c(all_handles,"Sybil Scoring Legos" = unique(list(data$Handle)))
+## Sybil Donation#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Donation",skip=1)#
+all_handles <- c(all_handles,"Sybil Donation" = unique(list(data$handle)))#
+#
+## NaiveFlagging#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="NaiveFlagging",skip=0)#
+all_handles <- c(all_handles,"NaiveFlagging" = unique(list(data$handle)))#
+#
+## Burners#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Burners",skip=0)#
+all_handles <- c(all_handles,"Burners" = unique(list(data$handle[data$Flag])))#
+#
+## SyncSwapVoters#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="SyncSwapVoters",skip=0)#
+all_handles <- c(all_handles,"SyncSwapVoters" = unique(list(data$handle[data$`Review?`])))#
+#
+## LOKI set#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="LOKI set",skip=0)#
+all_handles <- c(all_handles,"LOKI set" = unique(list(data$handle)))#
+#
+## Jigger GR14#
+# data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Jigger GR14",skip=0)#
+# wall_handles <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_wallets.csv")#
+#
+## Make Binary Matrix#
+all_handles_u <- unique(unlist(all_handles))#
+SybilBinary <- cbind(Handle=all_handles_u,as.data.frame(do.call(cbind,lapply(all_handles,function(x,all_handles_u) as.numeric(all_handles_u %in% x),all_handles_u=all_handles_u))))#
+SybilBinary <- SybilBinary[order(apply(SybilBinary[,-1],1,sum),decreasing=TRUE),]
+head(SybilBinary)
+rle(SybilBinary$`Sybil Scoring Legos`)
+legodata <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_app/LegoData.csv",show_col_types = FALSE)#
+SybilBinary <- SybilBinary[SybilBinary$Handle %in% legodata$Handle,]
+legodata <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_app/LegoData.csv",show_col_types = FALSE)#
+SybilBinary <- SybilBinary[SybilBinary$Handle %in% legodata$Handle,]#
+SybilBinary <- SybilBinary[order(apply(SybilBinary[,-1],1,sum),decreasing=TRUE),]#
+rle(SybilBinary$`Sybil Scoring Legos`)
+105+79+207
+SybilBinary [391:400,]
+## Read in file#
+library(readxl)#
+library(readr)#
+#
+## List all sheets#
+sheets <- excel_sheets("~/Downloads/GR15 Squelch Prep.xlsx")#
+all_handles <- list()#
+#
+## Sybil Scoring Legos#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Scoring Legos")#
+all_handles <- c(all_handles,"Sybil Scoring Legos" = unique(list(data$Handle)))#
+# data <- read_csv("~/Downloads/FilterHandles_1664365741.csv")#
+# all_handles <- c(all_handles,"Sybil Scoring Legos" = unique(list(data$Handle)))#
+## Sybil Donation#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Sybil Donation",skip=1)#
+all_handles <- c(all_handles,"Sybil Donation" = unique(list(data$handle)))#
+#
+## NaiveFlagging#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="NaiveFlagging",skip=0)#
+all_handles <- c(all_handles,"NaiveFlagging" = unique(list(data$handle)))#
+#
+## Burners#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Burners",skip=0)#
+all_handles <- c(all_handles,"Burners" = unique(list(data$handle[data$Flag])))#
+#
+## SyncSwapVoters#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="SyncSwapVoters",skip=0)#
+all_handles <- c(all_handles,"SyncSwapVoters" = unique(list(data$handle[data$`Review?`])))#
+#
+## LOKI set#
+data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="LOKI set",skip=0)#
+all_handles <- c(all_handles,"LOKI set" = unique(list(data$handle)))#
+#
+## Jigger GR14#
+# data <-  read_excel("~/Downloads/GR15 Squelch Prep.xlsx",sheet="Jigger GR14",skip=0)#
+# wall_handles <- read_csv("~/Desktop/Gitcoin Sybil LEGOs/data_input/gr15_contributions/20220923-001354_wallets.csv")#
+#
+## Make Binary Matrix#
+all_handles_u <- unique(unlist(all_handles))#
+SybilBinary <- cbind(Handle=all_handles_u,as.data.frame(do.call(cbind,lapply(all_handles,function(x,all_handles_u) as.numeric(all_handles_u %in% x),all_handles_u=all_handles_u))))#
+SybilBinary <- SybilBinary[order(apply(SybilBinary[,-1],1,sum),decreasing=TRUE),]#
+write_csv(SybilBinary,"~/Downloads/SybilBinary.csv")
+rle(SybilBinary$`Sybil Scoring Legos`)
+283+71+177
+head(SybilBinary)
+table(SybilBinary$`Sybil Donation` == SybilBinary$`LOKI set`)
+SybilBinary[531:540,]
+library(readr)#
+library(ggplot2)#
+library(hrbrthemes)#
+#
+data <- read_csv("~/Downloads/FilterHandles_1664376617.csv")
+head(data)
+plot(data$MetaRank_Loki, data$MetaRank_Thor)
+cor(data$MetaRank_Loki, data$MetaRank_Thor)
+length(NA)
+library(readr)#
+library(networkD3)#
+library(fst)#
+library(jsonlite)#
+library(tidyr)#
+library(ggplot2)#
+library(ggthemes)#
+library(omnitheme)#
+library(RColorBrewer)#
+library(igraph)#
+library(parallel)#
+## Load Helper Functions#
+setwd("~/Desktop/Gitcoin Sybil LEGOs")#
+source("app_helpers.R")#
+#
+## Load Lego Data#
+legodata <- read_csv("data_app/LegoData.csv",show_col_types = FALSE)#
+# Plot_Lev <- readRDS("data_app/Plot_Lev.RDS")#
+# Plot_Intersectionality <- readRDS("data_app/Plot_Intersectionality.RDS")#
+# Plot_DDNA <- readRDS("data_app/Plot_DDNA.RDS")#
+# Plot_APU <- readRDS("data_app/Plot_APU.RDS")#
+# Plot_SAD <- readRDS("data_app/Plot_SAD.RDS")#
+# Plot_IPs <- readRDS("data_app/Plot_IPs.RDS")#
+#
+## Read Data for Lev Panel#
+data_lev_scores <- read_csv("data_processed/Levenshtein_scores.csv",show_col_types = FALSE)#
+data_lev_matches <- "data_processed/Levenshtein_matches.fst"#
+#
+## Read Data for DDNA Panel#
+data_ddna_scores <- read_csv("data_processed/Jaccard_handles_scores.csv",show_col_types = FALSE)#
+data_ddna_matches <- "data_processed/Jaccard_handles_matches.fst"#
+data_ddna_matches_loaded <- read_fst(data_ddna_matches)#
+data_ddna_binmat <- "data_processed/Jaccard_binmat_handles.fst"#
+#
+## Read Data for GDNA Panel#
+owner_df <- read_csv("data_processed/grants_owners.csv",show_col_types = FALSE)#
+data_gdna_scores <- read_csv("data_processed/Jaccard_grants_scores.csv",show_col_types = FALSE)#
+data_gdna_matches <- "data_processed/Jaccard_grants_matches.fst"#
+data_gdna_binmat <- "data_processed/Jaccard_binmat_grants.fst"#
+#
+## Read Data for IPs Panel#
+data_ips_scores <- read_csv("data_processed/IPShared_scores.csv",show_col_types = FALSE)#
+data_ips_matches <- "data_processed/IPShared_matches.fst"#
+#
+## Read Data for Filtering and Export#
+legodatafull <- read_csv("data_app/LegoDataFull.csv",show_col_types = FALSE)#
+#
+input <- list()#
+input$handle_sel <- "004hf"#
+input$ips_network_handle <- "004hf"#
+input$grant_ddna_network_cutoff <- 0#
+input$grant_sel <- c("5719","7213","7219","6492")#
+                                                dt_grant <- 562#input$grant_sel[1]
+which(grepl("Whiteblock",owner_df$title))
+owner_df [282,]
+dt_grant <- 3557#input$grant_sel[1]#
+                                                dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                                han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))#
+                                                han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))#
+                                                han_idx_fil$Group = paste0("Donated To ",sapply(apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,function(x,y) y[x],y=dt_grant),paste0,collapse=", "))#
+                                                han_idx_fil$GroupSize = apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,sum)
+dt_grant2
+dt_grant <- 15#input$grant_sel[1]#
+                                                dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]
+dt_grant2
+han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))
+han_idx
+han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))#
+                                                han_idx_fil$Group = paste0("Donated To ",sapply(apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,function(x,y) y[x],y=dt_grant),paste0,collapse=", "))#
+                                                han_idx_fil$GroupSize = apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,sum)#
+                                                han_idx_fil <- han_idx_fil[data_ddna_scores$Distance_Min[match(han_idx_fil$Handle,data_ddna_scores$Handle)]<=input$grant_ddna_network_cutoff,]#
+                                                if(nrow(han_idx_fil)==0) stop("No Sybil Clusters Found")
+dt_grant <- 15#input$grant_sel[1]#
+                                                dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                                han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))
+han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))
+han_idx_fil$Group = paste0("Donated To ",sapply(apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,function(x,y) y[x],y=dt_grant),paste0,collapse=", "))#
+                                                han_idx_fil$GroupSize = apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,sum)
+sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle)
+dt_grant <- 15#input$grant_sel[1]#
+                                                dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                                han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))#
+                                                han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))#
+                                                # han_idx_fil$Group = paste0("Donated To ",sapply(apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,function(x,y) y[x],y=dt_grant),paste0,collapse=", "))#
+                                                # han_idx_fil$GroupSize = apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,sum)#
+                                                han_idx_fil <- han_idx_fil[data_ddna_scores$Distance_Min[match(han_idx_fil$Handle,data_ddna_scores$Handle)]<=input$grant_ddna_network_cutoff,]
+han_idx_fil
+if(nrow(han_idx_fil)==0)
+nrow(han_idx_fil)==0
+dt_grant <- 15#input$grant_sel[1]#
+                                                dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                                han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))#
+                                                han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))
+han_idx_fil
+han_idx_fil <- han_idx_fil[data_ddna_scores$Distance_Min[match(han_idx_fil$Handle,data_ddna_scores$Handle)]<=input$grant_ddna_network_cutoff,,drop=FALSE]
+han_idx_fil
+class(han_idx_fil)
+dt_grant <- 15#input$grant_sel[1]#
+                                                dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                                han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))
+han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))
+han_idx_fil
+paste0("Donated To ",sapply(apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,function(x,y) y[x],y=dt_grant),paste0,collapse=", "))
+if(TRUE)#
+{#
+    message("Here1")#
+    if(FALSE) break#
+    message("Here2")#
+}
+if(TRUE)#
+{#
+    message("Here1")#
+    if(FALSE) next#
+    message("Here2")#
+}
+dt_grant <- input$grant_sel#
+                                        dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                        han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))#
+                                        han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))
+han_idx_fil
+dt_grant <- 15#input$grant_sel[1]#
+                                                dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                                han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))#
+                                                han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))
+han_idx_fil
+dt_grant <- 15#input$grant_sel[1]
+dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                        han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))#
+                                        han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))#
+                                        if(nrow(han_idx_fil)>1) #
+                                        {   #
+                                            han_idx_fil$Group = paste0("Donated To ",sapply(apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,function(x,y) y[x],y=dt_grant),paste0,collapse=", "))#
+                                            han_idx_fil$GroupSize = apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,sum)#
+                                        }#
+                                        han_idx_fil <- han_idx_fil[data_ddna_scores$Distance_Min[match(han_idx_fil$Handle,data_ddna_scores$Handle)]<=input$grant_ddna_network_cutoff,]
+han_idx_fil
+dt_grant <- input$grant_sel#
+                                        dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                        han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))#
+                                        han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))#
+                                        if(nrow(han_idx_fil)>1) #
+                                        {   #
+                                            han_idx_fil$Group = paste0("Donated To ",sapply(apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,function(x,y) y[x],y=dt_grant),paste0,collapse=", "))#
+                                            han_idx_fil$GroupSize = apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,sum)#
+                                        }#
+                                        han_idx_fil <- han_idx_fil[data_ddna_scores$Distance_Min[match(han_idx_fil$Handle,data_ddna_scores$Handle)]<=input$grant_ddna_network_cutoff,]#
+                                        if(nrow(han_idx_fil)==0) gddna$nocluster <- TRUE
+dt_grant <- 15
+dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                        han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))#
+                                        han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))#
+                                        if(nrow(han_idx_fil)>1) #
+                                        {   #
+                                            han_idx_fil$Group = paste0("Donated To ",sapply(apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,function(x,y) y[x],y=dt_grant),paste0,collapse=", "))#
+                                            han_idx_fil$GroupSize = apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,sum)#
+                                        }#
+                                        han_idx_fil <- han_idx_fil[data_ddna_scores$Distance_Min[match(han_idx_fil$Handle,data_ddna_scores$Handle)]<=input$grant_ddna_network_cutoff,]#
+                                        if(nrow(han_idx_fil)==0) gddna$nocluster <- TRUE
+dt_grant <- 15#
+                                        dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                        han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))#
+                                        han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))#
+                                        if(nrow(han_idx_fil)>1) #
+                                        {   #
+                                            han_idx_fil$Group = paste0("Donated To ",sapply(apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,function(x,y) y[x],y=dt_grant),paste0,collapse=", "))#
+                                            han_idx_fil$GroupSize = apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,sum)#
+                                        }#
+                                        han_idx_fil <- han_idx_fil[data_ddna_scores$Distance_Min[match(han_idx_fil$Handle,data_ddna_scores$Handle)]<=input$grant_ddna_network_cutoff,]#
+                                        if(nrow(han_idx_fil)==0) gddna$nocluster <- TRUE
+dt_grant <- 15#
+                                        dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]#
+                                        han_idx <- lapply(match(dt_grant,data_gdna_scores$GrantId),function(x) names(which(unlist(read_fst(data_gdna_binmat, from=x,to=x))>0)))#
+                                        han_idx_fil <- data.frame(Handle=unique(unlist(han_idx)))#
+                                        if(nrow(han_idx_fil)>1) #
+                                        {   #
+                                            han_idx_fil$Group = paste0("Donated To ",sapply(apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,function(x,y) y[x],y=dt_grant),paste0,collapse=", "))#
+                                            han_idx_fil$GroupSize = apply(sapply(han_idx,function(x,y) y%in% x,y=han_idx_fil$Handle),1,sum)#
+                                        }#
+                                        han_idx_fil <- han_idx_fil[data_ddna_scores$Distance_Min[match(han_idx_fil$Handle,data_ddna_scores$Handle)]<=input$grant_ddna_network_cutoff,]
+han_idx_fil
+input$grant_sel <- c("5719","7213","7219","6492")
+dt_grant <- input$grant_sel#
+                                        dt_grant2 <- owner_df$title[match(dt_grant,owner_df$grant_id)]
+dt_grant2
+selectizeInput
+?selectizeInput
+??selectizeInput
