@@ -1,0 +1,7 @@
+data_input/gr15_contributions/20220923-001354_contributions_gr15.csv filter=lfs diff=lfs merge=lfs -text
+data_input/graphs/snapshot.json filter=lfs diff=lfs merge=lfs -text
+data_processed/IPShared_matches.csv filter=lfs diff=lfs merge=lfs -text
+data_processed/IPShared_matches.fst filter=lfs diff=lfs merge=lfs -text
+data_processed/Jaccard_distmat_handles.RDS filter=lfs diff=lfs merge=lfs -text
+data_processed/Jaccard_handles_matches.csv filter=lfs diff=lfs merge=lfs -text
+data_processed/Jaccard_handles_matches.fst filter=lfs diff=lfs merge=lfs -text
